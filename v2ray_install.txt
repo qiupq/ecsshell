@@ -1,0 +1,101 @@
+
+
+
+启动v2ray程序：
+	主程序在/usr/bin/v2ray/v2ray，
+	配置文件在/etc/v2ray/config.json
+
+	在ubuntu 14.04.5 中启动v2ray服务：
+	sudo service v2ray start | stop | restart | status
+
+	使用ps可看到：
+	一个进程：
+	/usr/bin/v2ray/v2ray -config /etc/v2ray/config.json
+
+配置文件：	/etc/v2ray/config.json
+
+
+termial 使用v2ray的socks5 上网：
+
+	1.命令：   nmap localhost
+	可看到：1081/tcp open  pvuniwien
+	使用的socks5端口是1081
+
+	2.命令：   curl ip.gs
+	可以查看本地IP信息，可以用来判断是否进行了代理：
+			Current IP / 当前 IP: 110.86.28.206
+			ISP / 运营商:  ChinaTelecom
+			City / 城市: Xiamen Fujian
+			Country / 国家: China
+	3.命令：	sudo apt-get install polipo
+	安装代理工具
+
+	4.配置代理工具：  sudo vi /etc/polipo/config 
+	增加以下内容：
+	  # set to use tor proxy
+	  socksParentProxy = localhost:1081
+	  socksProxyType = socks5
+	  # polipo proxy port ,want to use
+	  proxyPort = 1090
+	  
+	  # allow other ip to use this http proxy
+	  proxyAddress = "0.0.0.0"
+
+	5.重启服务：
+	   sudo service polipo restart
+
+	6.terminal导入代理:
+	   export http_proxy=http://localhost:1090
+	   export https_proxy=http://localhost:1090
+
+	7.验证：
+	   curl ip.gs
+	   curl www.google.com
+
+
+
+一些免费的v2ray服务器分享：
+https://v2fire.tk
+
+美国节点「1」100GB/天 凌晨重启更换UUID
+
+	UUID: 35dbb44e-e8f0-11e8-9be7-00163cca416d
+	AlterId: 64
+	Network: ws
+	传输安全: tls
+	Path：/acdc
+	Port：443
+	IP/地址：us1-nodes.v2ray.trade
+
+
+À´×ÔÃâ·Ñ·­Ç½Íøhttp://www.freefq.com
+
+
+
+vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogIlZBLTEwMTct576O5Zu9Lei0puWPt+abtOaWsO+8mmZhbmdlcWlhbmcuY29tIiwNCiAgImFkZCI6ICI1MS4xNS4xMDguOTEiLA0KICAicG9ydCI6ICIzMTI1OSIsDQogICJpZCI6ICI4MjZmOGQyZi0zZTg3LTRiMzMtYjlkMS0zZmFiMTljN2EzNzkiLA0KICAiYWlkIjogIjY0IiwNCiAgIm5ldCI6ICJ0Y3AiLA0KICAidHlwZSI6ICJub25lIiwNCiAgImhvc3QiOiAiIiwNCiAgInBhdGgiOiAiIiwNCiAgInRscyI6ICIiDQp9
+
+#V2Ray ¶þÎ¬Âë[¸´ÖÆµ½ä¯ÀÀÆ÷´ò¿ª±£´æ»òÉ¨Ãè
+#²ÉÓÃ vmess ÅäÖÃ£¬·þÎñÆ÷×Ü´ø¿íÉÏÏÞ 200Mb/S(25MB/S)
+
+https://fangeqiang.com/wp-content/uploads/2018101709291373.png
+
+·¨¹ú-V2Ray-10 ÔÂ 17 ÈÕ#V2Ray Á´½Ó[½ö¼æÈÝ°²×¿¿Í»§¶Ë:BifrostV: PC ¿Í»§¶Ë:V2RayN]
+#²ÉÓÃ HTTP/2 ÅäÖÃ£¬·þÎñÆ÷×Ü´ø¿íÉÏÏÞ 200Mb/S(25MB/S)
+
+vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogIlZCLTEwMTct5rOV5Zu9Lei0puWPt+abtOaWsO+8mmZhbmdlcWlhbmcuY29tIiwNCiAgImFkZCI6ICI1MS4xNS4xMTIuMjAxIiwNCiAgInBvcnQiOiAiMTg5MTkiLA0KICAiaWQiOiAiNTliODYwM2YtNGJhYS00N2RjLWEyY2QtM2Y1NGM2MmQwYWFiIiwNCiAgImFpZCI6ICI2NCIsDQogICJuZXQiOiAidGNwIiwNCiAgInR5cGUiOiAibm9uZSIsDQogICJob3N0IjogIiIsDQogICJwYXRoIjogIiIsDQogICJ0bHMiOiAiIg0KfQ==
+
+#V2Ray ¶þÎ¬Âë[¸´ÖÆµ½ä¯ÀÀÆ÷´ò¿ª±£´æ»òÉ¨Ãè[½ö¼æÈÝ°²×¿¿Í»§¶Ë:BifrostV: PC ¿Í»§¶Ë:V2RayN]
+#²ÉÓÃ HTTP/2 ÅäÖÃ£¬·þÎñÆ÷×Ü´ø¿íÉÏÏÞ 200Mb/S(25MB/S)
+
+https://fangeqiang.com/wp-content/uploads/2018101709292965.png
+
+´ò½´ÓÍµÄÐ¡°×£ºÃÀ¹ú Psychz 3T Á÷Á¿
+vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogInRveS1wc3ljaHoiLA0KICAiYWRkIjogIjEwNC4yMTYuMTExLjE5OCIsDQogICJwb3J0IjogIjEwNjUiLA0KICAiaWQiOiAiZjUxM2NiOWUtYWIyMC00YzY0LTljYzgtNjk1N2M1MGZkMDllIiwNCiAgImFpZCI6ICIxNiIsDQogICJuZXQiOiAidGNwIiwNCiAgInR5cGUiOiAibm9uZSIsDQogICJob3N0IjogIiIsDQogICJwYXRoIjogIiIsDQogICJ0bHMiOiAiIg0KfQ==
+
+
+ink£ºÍß¹¤±»Šip ÂåÉ¼´‰
+vmess://eyJhZGQiOiJub2JvZHkxMjMuZ2EiLCJhaWQiOiI2NCIsImhvc3QiOiIiLCJpZCI6IjRkODIxYjlhLTkzYmItNGI3ZC04YTdlLTQxYTAxZTliZmJjZSIsIm5ldCI6IndzIiwicGF0aCI6Ii9yYXkiLCJwb3J0IjoiNDQzIiwicHMiOiJub2JvZHkxMjMuZ2EiLCJ0bHMiOiJ0bHMiLCJ0eXBlIjoibm9uZSIsInYiOiIyIn0=
+
+
+
+
