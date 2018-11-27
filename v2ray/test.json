@@ -19,20 +19,20 @@
         },
         "streamSettings": null
       },
-      "outbound_it": {      
+      "outbound": {      
 		"tag": "agentout",
         "protocol": "vmess",
         "settings": {
           "vnext": [
             {
-              "address": "195.201.16.12",
-              "port": 15359,
+              "address": "a.v2ray.world",
+              "port": 443,
               "users": [
                 {
-                  "id": "4f39f3d3-7b57-4ae8-b0d1-4406fadbb1b0",
+                  "id": "c760a93b-b652-44a0-97d8-24b7a889c92c",
                   "alterId": 64,
                   "email": "t@t.tt",
-                  "security": "aes-128-gcm"
+                  "security": "chacha20-poly1305"
                 }
               ]
             }
@@ -40,17 +40,19 @@
           "servers": null
         },
         "streamSettings": {
-          "network": "tcp",
-          "security-v0": "tls",
-          "tlsSettings-v0": {
+          "network": "h2",
+          "security": "tls",
+          "tlsSettings": {
             "allowInsecure": true,
             "serverName": null
           },
           "tcpSettings": null,
           "kcpSettings": null,
-          "wsSettings": null,
-          "httpSettings-v0": {
-            "path": "/jiaocheng",
+          "wsSettings": {
+			"path": "/ray"
+		  },
+          "httpSettings": {
+            "path": "/fgq",
             "host": null
           }
         },
@@ -58,7 +60,8 @@
           "enabled": true
         }
 	},
-	"outbounds": [{
+	"outbounds-ali": [
+	{
       "protocol": "vmess",
       "settings": {
         "vnext": [
@@ -73,6 +76,12 @@
             ]
           }
         ]
+      },
+		"mux": {
+      		"enabled": true
+    	},
+      "streamSettings": {
+        "network":"ws"
       }
 	}
 ],
