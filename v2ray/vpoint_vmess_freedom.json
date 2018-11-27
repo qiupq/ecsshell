@@ -1,5 +1,5 @@
 {
-  "inbounds": [{
+  "inbounds":[ {
     "port": 10086,
     "protocol": "vmess",
     "settings": {
@@ -10,8 +10,13 @@
           "alterId": 64
         }
       ]
-    }
-  }],
+    },
+      "streamSettings": {
+        "network":"ws"
+      }
+
+  }
+],
   "outbounds": [{
     "protocol": "freedom",
     "settings": {}
