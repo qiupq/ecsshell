@@ -1,0 +1,137 @@
+ 
+     
+    {
+      "log": {
+        "access": "/var/log/v2ray/access.log",
+        "error": "/var/log/v2ray/error.log",
+        "loglevel": "warning"
+      },
+      "inbound": {
+        "port": 1081,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+"domainOverride": ["tls","http"],
+        "settings": {
+          "auth": "noauth",
+          "udp": true,
+          "ip": "127.0.0.1",
+          "clients": null
+        },
+        "streamSettings": null
+      },
+      "outbound_it": {      
+		"tag": "agentout",
+        "protocol": "vmess",
+        "settings": {
+          "vnext": [
+            {
+              "address": "195.201.16.12",
+              "port": 15359,
+              "users": [
+                {
+                  "id": "4f39f3d3-7b57-4ae8-b0d1-4406fadbb1b0",
+                  "alterId": 64,
+                  "email": "t@t.tt",
+                  "security": "aes-128-gcm"
+                }
+              ]
+            }
+          ],
+          "servers": null
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security-v0": "tls",
+          "tlsSettings-v0": {
+            "allowInsecure": true,
+            "serverName": null
+          },
+          "tcpSettings": null,
+          "kcpSettings": null,
+          "wsSettings": null,
+          "httpSettings-v0": {
+            "path": "/jiaocheng",
+            "host": null
+          }
+        },
+        "mux": {
+          "enabled": true
+        }
+	},
+	"outbounds": [{
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "47.107.237.116",
+            "port": 10086,  
+            "users": [
+              {
+                "id": "23ad6b10-8d1a-40f7-8ad0-e3e35cd38297",
+                "alterId": 64
+              }
+            ]
+          }
+        ]
+      }
+	}
+],
+
+      "inboundDetour": null,
+      "outboundDetour": [
+        {
+          "protocol": "freedom",
+          "settings": {
+            "response": null
+          },
+          "tag": "direct"
+        },
+        {
+          "protocol": "blackhole",
+          "settings": {
+            "response": {
+              "type": "http"
+            }
+          },
+          "tag": "blockout"
+        }
+      ],
+      "dns": {
+        "servers": [
+          "8.8.8.8",
+          "8.8.4.4",
+          "localhost"
+        ]
+      },
+      "routing": {
+        "strategy": "rules",
+        "settings": {
+          "domainStrategy": "IPIfNonMatch",
+          "rules": [
+            {
+              "type": "field",
+              "port": null,
+              "outboundTag": "direct",
+              "ip": [
+                "0.0.0.0/8",
+                "10.0.0.0/8",
+                "100.64.0.0/10",
+                "127.0.0.0/8",
+                "169.254.0.0/16",
+                "172.16.0.0/12",
+                "192.0.0.0/24",
+                "192.0.2.0/24",
+                "192.168.0.0/16",
+                "198.18.0.0/15",
+                "198.51.100.0/24",
+                "203.0.113.0/24",
+                "::1/128",
+                "fc00::/7",
+                "fe80::/10"
+              ],
+              "domain": null
+            }
+          ]
+        }
+      }
+    }
