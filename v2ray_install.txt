@@ -6,13 +6,33 @@
 	配置文件在/etc/v2ray/config.json
 
 	在ubuntu 14.04.5 中启动v2ray服务：
-	sudo service v2ray start | stop | restart | status
+	sudo systemctl  start | stop | restart | status v2ray
 
 	使用ps可看到：
 	一个进程：
 	/usr/bin/v2ray/v2ray -config /etc/v2ray/config.json
 
 配置文件：	/etc/v2ray/config.json
+
+UUID:
+	cat /proc/sys/kernel/random/uuid
+
+
+config.json
+
+
+	"users": [
+	{
+	  "id": "c760a93b-b652-44a0-97d8-24b7a889c92c",
+	  "alterId": 64,
+	  "email": "t@t.tt",
+	  "security": "chacha20-poly1305"
+	}
+	]
+其中security：加密方式，客户端将使用配置的加密方式发送数据，服务器端自动识别，无需配置。
+    security: "aes-128-gcm" | "chacha20-poly1305" | "auto" | "none"
+
+
 
 
 termial 使用v2ray的socks5 上网：
@@ -52,50 +72,110 @@ termial 使用v2ray的socks5 上网：
 	   curl ip.gs
 	   curl www.google.com
 
+TLS配置:服务器端配置了TLS,客户端可以不配TLS也可以上网的。
+RF：
+	https://toutyrater.github.io/advanced/tls.html
+	https://github.com/Neilpang/acme.sh
+
+1.安装 acme.sh
+curl  https://get.acme.sh | sh
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+		                             Dload  Upload   Total   Spent    Left  Speed
+	100   705  100   705    0     0    661      0  0:00:01  0:00:01 --:--:--   661
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+		                             Dload  Upload   Total   Spent    Left  Speed
+	100  164k  100  164k    0     0   182k      0 --:--:-- --:--:-- --:--:--  182k
+	[Wed Nov 28 09:13:06 CST 2018] Installing from online archive.
+	[Wed Nov 28 09:13:06 CST 2018] Downloading https://github.com/Neilpang/acme.sh/archive/master.tar.gz
+	[Wed Nov 28 09:13:07 CST 2018] Extracting master.tar.gz
+	[Wed Nov 28 09:13:07 CST 2018] It is recommended to install socat first.
+	[Wed Nov 28 09:13:07 CST 2018] We use socat for standalone server if you use standalone mode.
+	[Wed Nov 28 09:13:07 CST 2018] If you don't use standalone mode, just ignore this warning.
+	[Wed Nov 28 09:13:07 CST 2018] Installing to /root/.acme.sh
+	[Wed Nov 28 09:13:07 CST 2018] Installed to /root/.acme.sh/acme.sh
+	[Wed Nov 28 09:13:07 CST 2018] Installing alias to '/root/.bashrc'
+	[Wed Nov 28 09:13:07 CST 2018] OK, Close and reopen your terminal to start using acme.sh
+	[Wed Nov 28 09:13:07 CST 2018] Installing cron job
+	48 0 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null
+	[Wed Nov 28 09:13:07 CST 2018] Good, bash is found, so change the shebang to use bash as preferred.
+	[Wed Nov 28 09:13:07 CST 2018] OK
+	[Wed Nov 28 09:13:07 CST 2018] Install success!
+提示缺少socat,不使用standalone模式，那么可以忽略它，安装以下工具后，安装 acme.sh正常；
+apt-get install socat
+
+2.使用 acme.sh 生成证书：如果服务器没有开启80端口等网页的实际功能，可以加入选项standalone，它可以模拟出服务器80端口打开进行证书的生成，
+而且这80端口需要被VPS前的防火墙放行，因为证书的生成需要远端证书服务器进行，而这个需要远端证书服务器访问本主机的80端口；
+前提是需要在目标服务器上进行操作。
+.acme.sh/acme.sh --issue --standalone -k ec-256 -d hao.free1144.tk
+
+-k 表示密钥长度，后面的值可以是 ec-256 、ec-384、2048、3072、4096、8192，带有 ec 表示生成的是 ECC 证书，没有则是 RSA 证书。
+在安全性上 256 位的 ECC 证书等同于 3072 位的 RSA 证书；
+证书有两种，一种是 ECC 证书（内置公钥是 ECDSA 公钥），一种是 RSA 证书（内置 RSA 公钥）。
+ECC 的密钥长度比 RSA 短得多（加密解密会更快）。
+但问题是 ECC 的兼容性会差一些，Android 4.x 以下和 Windows XP 不支持。
+只要您的设备不是非常老的老古董，强烈建议使用 ECC 证书。
+成功后，注意：如果是aliyun的vps需要在安全组规则里进行设置80端口可以访问
+[Wed Nov 28 13:15:13 CST 2018] Your cert is in  /root/.acme.sh/hao.free1144.tk_ecc/hao.free1144.tk.cer 
+[Wed Nov 28 13:15:13 CST 2018] Your cert key is in  /root/.acme.sh/hao.free1144.tk_ecc/hao.free1144.tk.key 
+[Wed Nov 28 13:15:13 CST 2018] The intermediate CA cert is in  /root/.acme.sh/hao.free1144.tk_ecc/ca.cer 
+[Wed Nov 28 13:15:13 CST 2018] And the full chain certs is there:  /root/.acme.sh/hao.free1144.tk_ecc/fullchain.cer 
+
+
+3.证书更新
+由于 Let's Encrypt 的证书有效期只有 3 个月，因此需要 90 天至少要更新一次证书，acme.sh 脚本会每 60 天自动更新证书。也可以手动更新。
+手动更新 ECC 证书，执行：
+$ sudo ~/.acme.sh/acme.sh --renew -d hao.free1144.tk --force --ecc
+
+如果是 RSA 证书则执行：
+$ sudo ~/.acme.sh/acme.sh --renew -d hao.free1144.tk --force
+
+4.install
+~/.acme.sh/acme.sh --installcert -d hao.free1144.tk --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
+在/etc/v2ray路径上有以下文件生成。
+-rw-r--r-- 1 root root 3282 Nov 28 13:18 v2ray.crt
+-rw------- 1 root root  302 Nov 28 13:18 v2ray.key
+
+
+
+caddy
+https://caddyserver.com/tutorial
+
+指定配置文件：
+默认的配置文件：
+        CONF="/usr/local/caddy/Caddyfile"
+elif [ -f "/etc/caddy/Caddyfile" ]; then
+        CONF="/etc/caddy/Caddyfile"
+
+/usr/local/caddy/caddy -conf ../path/to/Caddyfile
+
+
+nginx
+apt-get install nginx
+
+root@qqq:~/git/ecsshell/v2ray# ls /etc/nginx/
+conf.d          koi-win           naxsi.rules          proxy_params     sites-enabled
+fastcgi_params  mime.types        naxsi-ui.conf.1.4.1  scgi_params      uwsgi_params
+koi-utf         naxsi_core.rules  nginx.conf           sites-available  win-utf
+root@qqq:~/git/ecsshell/v2ray# service nginx restart
+ * Restarting nginx nginx
+   ...done.
+root@qqq:~/git/ecsshell/v2ray# service nginx stop
+root@qqq:~/git/ecsshell/v2ray# vi /etc/nginx/
+
+https://zorz.cc/post/nginx-tlswebsocket-web-v2ray.html
+vi /etc/nginx/sites-enabled/hao.free1144.tk.conf
+
+
+
+
+
+
+
 
 
 一些免费的v2ray服务器分享：
 https://v2fire.tk
-
 美国节点「1」100GB/天 凌晨重启更换UUID
-
-	UUID: 35dbb44e-e8f0-11e8-9be7-00163cca416d
-	AlterId: 64
-	Network: ws
-	传输安全: tls
-	Path：/acdc
-	Port：443
-	IP/地址：us1-nodes.v2ray.trade
-
-
-À´×ÔÃâ·Ñ·­Ç½Íøhttp://www.freefq.com
-
-
-
-vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogIlZBLTEwMTct576O5Zu9Lei0puWPt+abtOaWsO+8mmZhbmdlcWlhbmcuY29tIiwNCiAgImFkZCI6ICI1MS4xNS4xMDguOTEiLA0KICAicG9ydCI6ICIzMTI1OSIsDQogICJpZCI6ICI4MjZmOGQyZi0zZTg3LTRiMzMtYjlkMS0zZmFiMTljN2EzNzkiLA0KICAiYWlkIjogIjY0IiwNCiAgIm5ldCI6ICJ0Y3AiLA0KICAidHlwZSI6ICJub25lIiwNCiAgImhvc3QiOiAiIiwNCiAgInBhdGgiOiAiIiwNCiAgInRscyI6ICIiDQp9
-
-#V2Ray ¶þÎ¬Âë[¸´ÖÆµ½ä¯ÀÀÆ÷´ò¿ª±£´æ»òÉ¨Ãè
-#²ÉÓÃ vmess ÅäÖÃ£¬·þÎñÆ÷×Ü´ø¿íÉÏÏÞ 200Mb/S(25MB/S)
-
-https://fangeqiang.com/wp-content/uploads/2018101709291373.png
-
-·¨¹ú-V2Ray-10 ÔÂ 17 ÈÕ#V2Ray Á´½Ó[½ö¼æÈÝ°²×¿¿Í»§¶Ë:BifrostV: PC ¿Í»§¶Ë:V2RayN]
-#²ÉÓÃ HTTP/2 ÅäÖÃ£¬·þÎñÆ÷×Ü´ø¿íÉÏÏÞ 200Mb/S(25MB/S)
-
-vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogIlZCLTEwMTct5rOV5Zu9Lei0puWPt+abtOaWsO+8mmZhbmdlcWlhbmcuY29tIiwNCiAgImFkZCI6ICI1MS4xNS4xMTIuMjAxIiwNCiAgInBvcnQiOiAiMTg5MTkiLA0KICAiaWQiOiAiNTliODYwM2YtNGJhYS00N2RjLWEyY2QtM2Y1NGM2MmQwYWFiIiwNCiAgImFpZCI6ICI2NCIsDQogICJuZXQiOiAidGNwIiwNCiAgInR5cGUiOiAibm9uZSIsDQogICJob3N0IjogIiIsDQogICJwYXRoIjogIiIsDQogICJ0bHMiOiAiIg0KfQ==
-
-#V2Ray ¶þÎ¬Âë[¸´ÖÆµ½ä¯ÀÀÆ÷´ò¿ª±£´æ»òÉ¨Ãè[½ö¼æÈÝ°²×¿¿Í»§¶Ë:BifrostV: PC ¿Í»§¶Ë:V2RayN]
-#²ÉÓÃ HTTP/2 ÅäÖÃ£¬·þÎñÆ÷×Ü´ø¿íÉÏÏÞ 200Mb/S(25MB/S)
-
-https://fangeqiang.com/wp-content/uploads/2018101709292965.png
-
-´ò½´ÓÍµÄÐ¡°×£ºÃÀ¹ú Psychz 3T Á÷Á¿
-vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogInRveS1wc3ljaHoiLA0KICAiYWRkIjogIjEwNC4yMTYuMTExLjE5OCIsDQogICJwb3J0IjogIjEwNjUiLA0KICAiaWQiOiAiZjUxM2NiOWUtYWIyMC00YzY0LTljYzgtNjk1N2M1MGZkMDllIiwNCiAgImFpZCI6ICIxNiIsDQogICJuZXQiOiAidGNwIiwNCiAgInR5cGUiOiAibm9uZSIsDQogICJob3N0IjogIiIsDQogICJwYXRoIjogIiIsDQogICJ0bHMiOiAiIg0KfQ==
-
-
-ink£ºÍß¹¤±»Šip ÂåÉ¼´‰
-vmess://eyJhZGQiOiJub2JvZHkxMjMuZ2EiLCJhaWQiOiI2NCIsImhvc3QiOiIiLCJpZCI6IjRkODIxYjlhLTkzYmItNGI3ZC04YTdlLTQxYTAxZTliZmJjZSIsIm5ldCI6IndzIiwicGF0aCI6Ii9yYXkiLCJwb3J0IjoiNDQzIiwicHMiOiJub2JvZHkxMjMuZ2EiLCJ0bHMiOiJ0bHMiLCJ0eXBlIjoibm9uZSIsInYiOiIyIn0=
-
 
 
 
