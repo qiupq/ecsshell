@@ -1,0 +1,8 @@
+hao.free1144.tk
+{
+  log /var/log/caddy.log
+  proxy /ray localhost:443 {
+    websocket
+    header_upstream -Origin
+  }
+}
