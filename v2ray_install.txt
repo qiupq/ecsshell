@@ -108,7 +108,7 @@ TLS配置:服务器端配置了TLS,客户端可以不配TLS也可以上网的。
 		而且这80端口需要被VPS前端的防火墙放行，因为证书的生成需要远端证书服务器进行，
 		而这个需要远端证书服务器访问本主机的80端口（aliyun的vps需要在安全组规则里进行设置80端口可以外部访问）；
 		前提是需要在目标服务器上进行操作。
-		.acme.sh/acme.sh --issue --standalone -k ec-256 -d hao.free1144.tk
+		.acme.sh/acme.sh --issue --standalone -k ec-256 -d vps_domain
 
 		-k 表示密钥长度，后面的值可以是 ec-256 、ec-384、2048、3072、4096、8192，带有 ec 表示生成的是 ECC 证书，没有则是 RSA 证书。
 		在安全性上 256 位的 ECC 证书等同于 3072 位的 RSA 证书；
@@ -117,13 +117,13 @@ TLS配置:服务器端配置了TLS,客户端可以不配TLS也可以上网的。
 		但问题是 ECC 的兼容性会差一些，Android 4.x 以下和 Windows XP 不支持。
 		只要您的设备不是非常老的老古董，强烈建议使用 ECC 证书。
 		成功后，
-		[Wed Nov 28 13:15:13 CST ] Your cert is in  /root/.acme.sh/hao.free1144.tk_ecc/hao.free1144.tk.cer 
-		[Wed Nov 28 13:15:13 CST ] Your cert key is in  /root/.acme.sh/hao.free1144.tk_ecc/hao.free1144.tk.key 
-		[Wed Nov 28 13:15:13 CST ] The intermediate CA cert is in  /root/.acme.sh/hao.free1144.tk_ecc/ca.cer 
-		[Wed Nov 28 13:15:13 CST ] And the full chain certs is there:  /root/.acme.sh/hao.free1144.tk_ecc/fullchain.cer 
+		[Wed Nov 28 13:15:13 CST ] Your cert is in  /root/.acme.sh/vps_domain_ecc/vps_domain.cer 
+		[Wed Nov 28 13:15:13 CST ] Your cert key is in  /root/.acme.sh/vps_domain_ecc/vps_domain.key 
+		[Wed Nov 28 13:15:13 CST ] The intermediate CA cert is in  /root/.acme.sh/vps_domain_ecc/ca.cer 
+		[Wed Nov 28 13:15:13 CST ] And the full chain certs is there:  /root/.acme.sh/vps_domain_ecc/fullchain.cer 
 
 	3.安装证书到本地
-		~/.acme.sh/acme.sh --installcert -d hao.free1144.tk --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
+		~/.acme.sh/acme.sh --installcert -d vps_domain --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
 		在/etc/v2ray路径上有以下文件生成。
 		-rw-r--r-- 1 root root 3282 Nov 28 13:18 v2ray.crt
 		-rw------- 1 root root  302 Nov 28 13:18 v2ray.key
@@ -131,10 +131,10 @@ TLS配置:服务器端配置了TLS,客户端可以不配TLS也可以上网的。
 	4.证书更新
 		由于 Let's Encrypt 的证书有效期只有 3 个月，因此需要 90 天至少要更新一次证书，acme.sh 脚本会每 60 天自动更新证书。也可以手动更新。
 		手动更新 ECC 证书，执行：
-		$ sudo ~/.acme.sh/acme.sh --renew -d hao.free1144.tk --force --ecc
+		$ sudo ~/.acme.sh/acme.sh --renew -d vps_domain --force --ecc
 
 		如果是 RSA 证书则执行：
-		$ sudo ~/.acme.sh/acme.sh --renew -d hao.free1144.tk --force
+		$ sudo ~/.acme.sh/acme.sh --renew -d vps_domain --force
 
 
 
