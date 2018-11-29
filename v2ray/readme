@@ -1,0 +1,10 @@
+maybe error:{
+
+before runing:
+creat dir or file:
+/var/log/v2ray/error.txt
+/var/log/v2ray/access.txt
+}
+run CMD:{
+./v2ray -config vpoint_vmess_freedom.json 
+}
