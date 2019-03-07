@@ -1,4 +1,10 @@
 #!/bin/bash
+#add apt-add-repository function
+apt-get install software-properties-common --yes
+#add edit app
+apt-get install vim --yes
+#add ssh tools
+apt-get install mosh --yes 
 
 apt-get install nmap --yes
 apt-get install traceroute --yes
