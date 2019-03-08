@@ -9,9 +9,10 @@ apt-get install libasound2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-
 apt-get install 'libdbus-1-*' 'libatspi2.0-*' --yes
 #Documentation
 #  Clang (>=6.x)
-#mkdir -p /opt/clang
+#mkdir -p /opt
 #wget http://releases.llvm.org/6.0.1/clang+llvm-6.0.1-x86_64-linux-gnu-ubuntu-14.04.tar.xz -O /opt/clang.tar.xz
-#tar -xJf /opt/clang.tar.xz -C /opt/clang
+#tar -xJf /opt/clang.tar.xz -C /opt/
+#mv clang+llvm-6.0.1-x86_64-linux-gnu-ubuntu-14.04 clang
 #echo "PATH=/opt/clang/bin:\$PATH" >> ~/.bashrc
 
 #ubuntu 18.04 is 
