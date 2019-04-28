@@ -4,8 +4,26 @@ mkdir -p /home/qq/
 cd /home/qq
 
 #set evironment
-git config --global user.email "qq@163.com"
+git config --global user.email "qiuworker@126.com"
 git config --global user.name "qq"
+function imx-4.14.98-2.0.0_build
+{
+	echo "runing"
+	mkdir -p /home/qq/imx-yocto-bsp
+	cd /home/qq/imx-yocto-bsp
+	
+	
+	repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-sumo -m imx-4.14.98-2.0.0_ga.xml
+
+	repo sync
+	
+	DISTRO=fsl-imx-x11 MACHINE=imx6qsabresd source fsl-setup-release.sh -b build-x11
+	bitbake fsl-image-validation-imx
+	
+}
+
+function phyteclinux
+{
   
 #download
 
@@ -207,4 +225,16 @@ bitbake phytec-qt5demo-image
 #                    256MiB RAM one bank, no SPI-NOR
 #                    distro: yogurt
 #                    target: phytec-qt5demo-image
+}
 
+
+if [ $1 == "imx6" ]
+then
+	echo "imx-4.14.98-2.0.0_build"
+
+	imx-4.14.98-2.0.0_build
+
+else
+	echo "phyteclinux"
+	phyteclinux
+fi
