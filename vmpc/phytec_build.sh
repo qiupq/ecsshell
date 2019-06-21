@@ -6,11 +6,56 @@ cd /home/qq
 #set evironment
 git config --global user.email "qiuworker@126.com"
 git config --global user.name "qq"
+function imx-4.14.78-1.0.0_ga
+{
+	echo "runing"
+	mkdir -p /home/qq/imx-4.14.78
+	cd /home/qq/imx-4.14.78
+	repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-sumo -m imx-4.14.78-1.0.0_ga.xml
+		repo sync
+		
+	DISTRO=fsl-imx-wayland MACHINE=imx6qsabresd source fsl-setup-release.sh -b build-wayland
+	bitbake linux-imx
+	#bitbake fsl-image-validation-imx
+#images
+#	fsl-image-qt5-validation-imx
+#	fsl-image-validation-imx
+#	core-image-minimal
+#distribution
+# fsl-imx-x11 - X11 graphics are not supported on i.MX 8.
+# fsl-imx-wayland - Wayland weston graphics.
+# fsl-imx-xwayland - Wayland graphics and X11. X11 applications using EGL are not supported.
+# fsl-imx-fb - Frame Buffer graphics - no X11 or Wayland. Frame Buffer is not supported on i.MX 8
+
+#machine
+#	imx6qpsabreauto
+#	imx6qpsabresd
+#	imx6ulevk
+#	imx6ulz14x14evk
+#	imx6ull14x14evk
+#	imx6ull9x9evk
+#	imx6dlsabreauto
+#	imx6dlsabresd
+#	imx6qsabreauto
+#	imx6qsabresd
+#	imx6slevk
+#	imx6solosabreauto
+#	imx6solosabresd
+#	imx6sxsabresd
+#	imx6sxsabreauto
+#	imx6sllevk
+#	imx7dsabresd
+#	imx7ulpevk
+#	imx8qmmek
+#	imx8qxpmek
+#	imx8mqevk
+#	imx8mmevk
+}
 function imx-4.14.98-2.0.0_build
 {
 	echo "runing"
-	mkdir -p /home/qq/imx-yocto-bsp
-	cd /home/qq/imx-yocto-bsp
+	mkdir -p /home/qq/imx-4.14.98
+	cd /home/qq/imx-4.14.98
 	
 	
 	repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-sumo -m imx-4.14.98-2.0.0_ga.xml
