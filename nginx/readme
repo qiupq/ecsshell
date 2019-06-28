@@ -2,22 +2,24 @@ ENV:
 {
 ubuntu 14.04.5
 
-install way:
-apt-get install nginx
+	install way:
+		apt-get install nginx
 
 install version:
-nginx version: nginx/1.4.6 (Ubuntu)
-built by gcc 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.4) 
+	nginx version: nginx/1.4.6 (Ubuntu)
+	built by gcc 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.4) 
 
 }
 action-config:
 {
-cp default /etc/nginx/sites-enabled/default  
+	cp default /etc/nginx/sites-enabled/default  
 }
 action-start-stop:
 {
-service nginx start
-service nginx stop
+	service nginx start
+	service nginx stop
 
 }
+
+debug
 log:/var/log/nginx/error.log

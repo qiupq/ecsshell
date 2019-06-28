@@ -29,9 +29,9 @@ v2ray
 		  "security": "chacha20-poly1305"
 		}
 		]
-		其中security：加密方式，客户端将使用配置的加密方式发送数据，服务器端自动识别，无需配置。
+		其中security为加密方式，客户端将使用配置的加密方式发送数据，服务器端自动识别，无需配置。
+		此加密是对 QUIC 数据包的加密，加密后数据包无法被探测。
 	  		  security: "aes-128-gcm" | "chacha20-poly1305" | "auto" | "none"
-
 
 
 termial 使用v2ray的socks5 上网：
@@ -42,9 +42,9 @@ termial 使用v2ray的socks5 上网：
 
 	2.命令：   curl ip.gs
 		可以查看本地IP信息，可以用来判断是否进行了代理：
-			Current IP / 当前 IP: 110.86.28.206
+			Current IP / 当前 IP: 11.8.128.206
 			ISP / 运营商:  ChinaTelecom
-			City / 城市: Xiamen Fujian
+			City / 城市: 
 			Country / 国家: China
 	3.命令：	sudo apt-get install polipo
 		安装代理工具
@@ -71,52 +71,35 @@ termial 使用v2ray的socks5 上网：
 	   curl ip.gs
 	   curl www.google.com
 
+
 TLS配置:服务器端配置了TLS,客户端可以不配TLS也可以上网的。
 	RF：
 		https://toutyrater.github.io/advanced/tls.html
 		https://github.com/Neilpang/acme.sh
-	服务器端配置ＴＬＳ，由于Ｖ2ray已经支持这个协议，
+	服务器端配置，由于Ｖ2ray已经支持这个协议，
 	而实际要做的就是根据你的域名申请一个证书密钥，加密数据；
 	1.申请证书需要安装 acme.sh
 		curl  https://get.acme.sh | sh
-
-		  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-				                         Dload  Upload   Total   Spent    Left  Speed
-		100   705  100   705    0     0    661      0  0:00:01  0:00:01 --:--:--   661
-		  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-				                         Dload  Upload   Total   Spent    Left  Speed
-		100  164k  100  164k    0     0   182k      0 --:--:-- --:--:-- --:--:--  182k
-		[Wed Nov 28 09:13:06 CST ] Installing from online archive.
-		[Wed Nov 28 09:13:06 CST ] Downloading https://github.com/Neilpang/acme.sh/archive/master.tar.gz
-		[Wed Nov 28 09:13:07 CST ] Extracting master.tar.gz
-		[Wed Nov 28 09:13:07 CST ] It is recommended to install socat first.
-		[Wed Nov 28 09:13:07 CST ] We use socat for standalone server if you use standalone mode.
-		[Wed Nov 28 09:13:07 CST ] If you don't use standalone mode, just ignore this warning.
-		[Wed Nov 28 09:13:07 CST ] Installing to /root/.acme.sh
-		[Wed Nov 28 09:13:07 CST ] Installed to /root/.acme.sh/acme.sh
-		[Wed Nov 28 09:13:07 CST ] Installing alias to '/root/.bashrc'
-		[Wed Nov 28 09:13:07 CST ] OK, Close and reopen your terminal to start using acme.sh
-		[Wed Nov 28 09:13:07 CST ] Installing cron job
-		48 0 * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null
+		.....
 		[Wed Nov 28 09:13:07 CST ] Good, bash is found, so change the shebang to use bash as preferred.
 		[Wed Nov 28 09:13:07 CST ] OK
 		[Wed Nov 28 09:13:07 CST ] Install success!
-		提示缺少socat,不使用standalone模式，那么可以忽略它，安装以下工具后，安装 acme.sh正常；
+		提示缺少socat,不使用standalone模式，可以忽略它,其实我们要用这个模式，安装以下工具后，安装 acme.sh正常；
 		apt-get install socat
 
 	2.使用 acme.sh 生成证书：如果服务器没有开启80端口等网页的实际功能，可以加入选项standalone，它可以模拟出服务器80端口功能打开进行证书的生成，
-		而且这80端口需要被VPS前端的防火墙放行，因为证书的生成需要远端证书服务器进行，
-		而这个需要远端证书服务器访问本主机的80端口（aliyun的vps需要在安全组规则里进行设置80端口可以外部访问）；
-		前提是需要在目标服务器上进行操作。
+		而且这80端口需要被VPS前端的防火墙放行，因为证书的生成需要远端证书服务器参与，
+		而这个过程需要远端证书服务器访问本主机的80端口（aliyun的VPS需在安全组规则里进行设置:80端口可以外部访问）；
+		VPS上进行操作：生成证书(需要事先申请一个域名，这个域名和这个VPS进行绑定）
 		.acme.sh/acme.sh --issue --standalone -k ec-256 -d vps_domain
-
+		说明：
 		-k 表示密钥长度，后面的值可以是 ec-256 、ec-384、2048、3072、4096、8192，带有 ec 表示生成的是 ECC 证书，没有则是 RSA 证书。
 		在安全性上 256 位的 ECC 证书等同于 3072 位的 RSA 证书；
 		证书有两种，一种是 ECC 证书（内置公钥是 ECDSA 公钥），一种是 RSA 证书（内置 RSA 公钥）。
 		ECC 的密钥长度比 RSA 短得多（加密解密会更快）。
 		但问题是 ECC 的兼容性会差一些，Android 4.x 以下和 Windows XP 不支持。
 		只要您的设备不是非常老的老古董，强烈建议使用 ECC 证书。
-		成功后，
+		申请成功后的输出：
 		[Wed Nov 28 13:15:13 CST ] Your cert is in  /root/.acme.sh/vps_domain_ecc/vps_domain.cer 
 		[Wed Nov 28 13:15:13 CST ] Your cert key is in  /root/.acme.sh/vps_domain_ecc/vps_domain.key 
 		[Wed Nov 28 13:15:13 CST ] The intermediate CA cert is in  /root/.acme.sh/vps_domain_ecc/ca.cer 
@@ -135,8 +118,6 @@ TLS配置:服务器端配置了TLS,客户端可以不配TLS也可以上网的。
 
 		如果是 RSA 证书则执行：
 		$ sudo ~/.acme.sh/acme.sh --renew -d vps_domain --force
-
-
 
 caddy
 	RF:
@@ -165,16 +146,6 @@ nginx
 
 		service nginx stop
 
-
-
-
-
-
-
-
-一些免费的v2ray服务器分享：
-https://v2fire.tk
-美国节点「1」100GB/天 凌晨重启更换UUID
 
 
 

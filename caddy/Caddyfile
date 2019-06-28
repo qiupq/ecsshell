@@ -1,4 +1,4 @@
-hao.free1144.tk
+hao.nba.tk
 {
   log /var/log/caddy.log
   proxy /ray localhost:443 {

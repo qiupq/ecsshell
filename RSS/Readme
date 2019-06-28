@@ -1,0 +1,10 @@
+
+1.open v2rayNG app,cut all nodes , then save it as a txt file;
+
+
+2.upload to pc, open browser search base64 code/decode
+exp:
+	https://tool.oschina.net/encrypt?type=3
+ copy the content to covert it  to base64 code;save result
+
+3.upload it to github, then specify RSS as http://raw.githubsercontent.com/abc/project/v2ray.base64
