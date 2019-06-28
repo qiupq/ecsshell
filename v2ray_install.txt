@@ -147,5 +147,98 @@ nginx
 		service nginx stop
 
 
+mKCP/KCP config：
+	如果你发现你的网络环境丢包严重，可以考虑一下使用 mKCP。由于快速重传的机制，相对于常规的 TCP 来说，mKCP 在高丢包率的网络下具有更大的优势，也正是因为此， mKCP 明显会比 TCP 耗费更多的流量，所以请酌情使用。
+	mKCP 的配置比较简单，只需在服务器的 inbounds 和 客户端的 outbounds 添加一个 streamSettings 并设置成 mkcp 即可。
 
+在客户端和服务器端修改以下内容：
+        "streamSettings": {
+        	"network": "kcp",
+        	"kcpSettings": {
+            	"uplinkCapacity": 5,
+          		"downlinkCapacity": 100,
+          		"congestion": true,
+          	"header": {
+            	"type": "none"
+          		}
+         	}
+	}
+
+ 其中:type 可以是 utp、srtp、wechat-video、dtls、wireguard 或者 none，这几个分别将 mKCP 数据伪装成 BT 下载、视频通话、微信视频通话、dtls、wireguard(一种新型 VPN)以及不进行伪装。
+	在V2Ray 4.18.0 中type进行测试，发现只用设置为none可以用，其它设置了都不能用。
+
+设置完后，pc机设置后可以上网，android不能上,暂时在"inbounds"中增加另外一个端口。
+
+动态端口
+RF:
+	https://toutyrater.github.io/advanced/dynamicport.html
+服务器 inbound 的端口作为主端口，在 inboundDetour 开动态监听的端口，客户端不用额外设定，客户端会先与服务器的主端口通信协商下一个使用的端口号。
+以下就是需要增加的内容：
+    "detour": { //绕行配置，即指示客户端使用 dynamicPort 的配置通信
+      "to": "dynamicPort"   
+    }
+
+ {
+      "protocol": "vmess",
+      "port": "10000-20000", // 端口范围
+      "tag": "dynamicPort",  // 与上面的 detour to 相同
+      "settings": {
+        "default": {
+          "alterId": 64
+        }
+      },
+      "allocate": {            // 分配模式
+        "strategy": "random",  // 随机开启
+        "concurrency": 2,      // 同时开放两个端口,这个值最大不能超过端口范围的 1/3
+        "refresh": 3           // 每三分钟刷新一次
+      }
+   }
+增加后的参考：
+  "inbounds":[ {
+    "port": 4433,
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "23ad6b10-8d1a-40f7-8ad0-e3e35cd38297",
+          "level": 1,
+          "alterId": 64
+        }
+      ],
+        "detour": {
+          "to": "dynamicPort"
+        }
+    },
+      "streamSettings": {
+        "network":"kcp",
+        "kcpSettings": {
+          "uplinkCapacity": 5,
+          "downlinkCapacity": 100,
+          "congestion": true,
+          "header": {
+            "type": "none"
+          }
+        },
+        "wsSettings":{
+        "path":"/ray"
+        }
+      }
+
+  },
+    {
+      "protocol": "vmess",
+      "port": "10000-20000",
+      "tag": "dynamicPort",
+      "settings": {
+        "default": {
+          "alterId": 64
+        }
+      },
+      "allocate": {
+        "strategy": "random",
+        "concurrency": 2,
+        "refresh": 3
+      }
+    }
+]
 
