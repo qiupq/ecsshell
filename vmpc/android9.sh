@@ -14,7 +14,7 @@ function get_android_code
 	cd android_pie
 	repo init -u https://github.com/AOSiP/platform_manifest.git -b pie
 #repo init -u  git://github.com/AOSiP/platform_manifest.git -b pie
-	repo sync --force-sync --no-tags --no-clone-bundle
+	repo sync -j`nproc` --no-repo-verify --force-sync --no-tags --no-clone-bundle
 #repo sync --no-tags --no-clone-bundle --no-repo-verify
 }
 function build_android
