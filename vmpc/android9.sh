@@ -6,6 +6,7 @@ cd /home/qq
 #set evironment
 git config --global user.email "qiuworker@126.com"
 git config --global user.name "qq"
+ssh-keygen  -t rsa -P '' -f ~/.ssh/id_rsa
 function get_android_code
 {
 	echo "get android code"
