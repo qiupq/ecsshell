@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -x
 echo "install v2ray app ..."
-CWD=$(pwd)
+CWD=/root/ecsshell-master/v2ray
 INSTALLDIR=/usr/bin/v2ray
 mkdir -p $INSTALLDIR
 cp -apf $CWD/4.31.0/* $INSTALLDIR
