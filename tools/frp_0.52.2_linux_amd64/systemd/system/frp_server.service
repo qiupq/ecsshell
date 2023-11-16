@@ -1,0 +1,16 @@
+[Unit]
+Description=frp server side Service
+After=network.target nss-lookup.target
+Wants=network.target
+
+[Service]
+
+Type=simple
+PIDFile=/var/run/frps.pid
+ExecStart=/usr/bin/frps -c /etc/frp/service.ini
+Restart=on-failure
+# Don't restart in the case of configuration error
+RestartPreventExitStatus=23
+
+[Install]
+WantedBy=multi-user.target
