@@ -11,7 +11,7 @@ INSTALLDIR=/usr/bin/
 mkdir -p $INSTALLDIR
 cp -apf $CWD/frp* $INSTALLDIR
 
-CONFIGDIR=/etc/frq
+CONFIGDIR=/etc/frp
 mkdir -p $CONFIGDIR
 cp $CWD/service.ini $CONFIGDIR
 cp $CWD/client.ini  $CONFIGDIR
