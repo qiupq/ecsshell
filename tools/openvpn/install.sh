@@ -16,17 +16,20 @@ mkdir -p $CONFIGDIR
 cp $CWD/*.ovpn $CONFIGDIR
 
 SYSTEMDDIR=/etc/systemd/system/
-cp $CWD/systemd/system/openvpn.service $SYSTEMDDIR
-#cp $CWD/systemd/system/openvpn.service $SYSTEMDDIR
+cp $CWD/systemd/system/openvpns.service $SYSTEMDDIR
+#cp $CWD/systemd/system/openvpns.service $SYSTEMDDIR
 systemctl daemon-reload
 
 #client run
 #systemctl enable openvpn_client.service
 #systemctl restart openvpn_client.service
 
+echo "1" > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -s 10.10.10.0/24 -j MASQUERADE
+
 #service run
-systemctl enable openvpn.service
-systemctl restart openvpn.service
+systemctl enable openvpns.service
+systemctl restart openvpns.service
 
 echo "to the end."
 exit 0
