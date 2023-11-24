@@ -1,0 +1,15 @@
+[Unit]
+Description=frp server side Service
+After=network.target nss-lookup.target
+Wants=network.target
+
+[Service]
+Type=forking
+ExecStart=/etc/oem/bootup.sh
+
+[Install]
+WantedBy=multi-user.target
+
+
+[Install]
+WantedBy=multi-user.target
