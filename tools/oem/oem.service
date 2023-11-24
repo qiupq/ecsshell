@@ -1,5 +1,5 @@
 [Unit]
-Description=frp server side Service
+Description=oem side Service
 After=network.target nss-lookup.target
 Wants=network.target
 
@@ -10,6 +10,3 @@ ExecStart=/etc/oem/bootup.sh
 [Install]
 WantedBy=multi-user.target
 
-
-[Install]
-WantedBy=multi-user.target
