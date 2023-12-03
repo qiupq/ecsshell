@@ -5,9 +5,11 @@ FILE=$0
 ALL=`readlink -f  ${FILE}`
 CWD=`dirname ${ALL}`
 echo "CWD=$CWD"
+apt install openvpn -y 
 
-INSTALLDIR=/usr/bin
-
+INSTALLDIR=/usr/sbin
+mv /usr/sbin/openvpn /usr/sbin/openvpnv0
+cp -af openvpn  $INSTALLDIR
 #mkdir -p $INSTALLDIR
 #cp -apf $CWD/*.ovpn $INSTALLDIR
 
