@@ -9,12 +9,12 @@ echo "CWD=$CWD"
 apt install openvpn  -y 
 
 INSTALLDIR=/usr/sbin
+if [ ! -f /usr/sbin/openvpnv0 ] ; then
 mv /usr/sbin/openvpn /usr/sbin/openvpnv0
 cp -af $CWD/openvpn  $INSTALLDIR
-exit 0
 #mkdir -p $INSTALLDIR
 #cp -apf $CWD/*.ovpn $INSTALLDIR
-
+fi
 CONFIGDIR=/etc/openvpn
 mkdir -p $CONFIGDIR
 cp $CWD/*.ovpn $CONFIGDIR
