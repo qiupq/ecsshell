@@ -20,6 +20,11 @@
 		"settings": {},
 		"tag": "blocked"
 		}],
+	"log": {
+		"access": "/var/log/v2ray/server_access.log",
+		"error": "/var/log/v2ray/server_error.log",
+		"loglevel": "warning"
+	},
 	"routing": {
 		"rules": [
 		{
