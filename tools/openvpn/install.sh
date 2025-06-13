@@ -9,12 +9,18 @@ echo "CWD=$CWD"
 apt install openvpn  -y 
 
 INSTALLDIR=/usr/sbin
-if [ ! -f /usr/sbin/openvpnv0 ] ; then
-mv /usr/sbin/openvpn /usr/sbin/openvpnv0
-cp -af $CWD/openvpn  $INSTALLDIR
-#mkdir -p $INSTALLDIR
-#cp -apf $CWD/*.ovpn $INSTALLDIR
+GETSSLVER=$(openssl version |awk '{print $2}')
+if [ "x$GETSSLVER" == "x1.1.1" ] ; then
+    echo "ver:1.1.1"
+
+    if [ ! -f /usr/sbin/openvpnv0 ] ; then
+    mv /usr/sbin/openvpn /usr/sbin/openvpnv0
+    cp -af $CWD/openvpn  $INSTALLDIR
+    #mkdir -p $INSTALLDIR
+    #cp -apf $CWD/*.ovpn $INSTALLDIR
+    fi
 fi
+
 CONFIGDIR=/etc/openvpn
 mkdir -p $CONFIGDIR
 cp $CWD/*.ovpn $CONFIGDIR
